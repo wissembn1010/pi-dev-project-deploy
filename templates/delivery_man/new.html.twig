@@ -1,0 +1,16 @@
+{% extends 'admin_base.html.twig' %}
+
+{% block title %}Add Delivery Man - BIG 4 Admin{% endblock %}
+
+{% block body %}
+    <div class="admin-header">
+        <h1>Add New Delivery Man</h1>
+        <p style="color: var(--text-2);">Register a new delivery personnel</p>
+    </div>
+
+    {{ include('delivery_man/_form.html.twig') }}
+
+    <p style="margin-top: 2rem;">
+        <a href="{{ path('app_delivery_man_index') }}" style="color: var(--gold);">← Back to Delivery Men</a>
+    </p>
+{% endblock %}

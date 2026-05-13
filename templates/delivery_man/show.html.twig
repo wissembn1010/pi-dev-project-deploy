@@ -1,0 +1,37 @@
+{% extends 'admin_base.html.twig' %}
+
+{% block title %}Delivery Man #{{ delivery_man.deliveryManId }} - BIG 4 Admin{% endblock %}
+
+{% block body %}
+    <div class="admin-header">
+        <h1>Delivery Man Details</h1>
+        <p style="color: var(--text-2);">Personnel #{{ delivery_man.delivery_man_id }}</p>
+    </div>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <tr>
+                <th style="width: 30%;">Field</th>
+                <th>Value</th>
+            </tr>
+            <tr><td>ID</td><td>{{ delivery_man.delivery_man_id }}</td></tr>
+            <tr><td>Name</td><td>{{ delivery_man.name }}</td></tr>
+            <tr><td>Phone</td><td>{{ delivery_man.phone }}</td></tr>
+            <tr><td>Email</td><td>{{ delivery_man.email }}</td></tr>
+            <tr><td>Vehicle Type</td><td>{{ delivery_man.vehicle_type }}</td></tr>
+            <tr><td>Vehicle Number</td><td>{{ delivery_man.vehicle_number }}</td></tr>
+            <tr><td>Status</td><td><strong style="color: var(--gold);">{{ delivery_man.status }}</strong></td></tr>
+            <tr><td>Address</td><td>{{ delivery_man.address }}</td></tr>
+            <tr><td>Salary</td><td>${{ delivery_man.salary }}</td></tr>
+            <tr><td>Date of Joining</td><td>{{ delivery_man.date_of_joining ? delivery_man.date_of_joining|date('Y-m-d') : '-' }}</td></tr>
+            <tr><td>Rating</td><td>{{ delivery_man.rating }}/5</td></tr>
+            <tr><td>Created At</td><td>{{ delivery_man.created_at ? delivery_man.created_at|date('Y-m-d H:i:s') : '-' }}</td></tr>
+            <tr><td>Updated At</td><td>{{ delivery_man.updated_at ? delivery_man.updated_at|date('Y-m-d H:i:s') : '-' }}</td></tr>
+        </table>
+    </div>
+
+    <div class="admin-actions" style="margin-top: 2rem;">
+        <a href="{{ path('app_delivery_man_edit', {'id': delivery_man.delivery_man_id}) }}" class="admin-btn">Edit</a>
+        <a href="{{ path('app_delivery_man_index') }}" class="admin-btn" style="background: var(--text-2);">Back to Delivery Men</a>
+    </div>
+{% endblock %}

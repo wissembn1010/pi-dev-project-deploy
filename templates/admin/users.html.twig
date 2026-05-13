@@ -1,0 +1,54 @@
+{% extends 'admin_base.html.twig' %}
+
+{% block title %}Users Management - Admin{% endblock %}
+
+{% block body %}
+<div class="admin-header">
+    <h1>Users Management</h1>
+    <p>Manage clients and delivery men.</p>
+</div>
+
+<div class="admin-content">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Banned</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.firstName }} {{ user.lastName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.banned ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <form method="post" action="{{ path('app_admin_user_ban', {id: user.id}) }}" style="display: inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('ban' ~ user.id) }}">
+                            <button type="submit" class="btn-small">Ban</button>
+                        </form>
+                        <form method="post" action="{{ path('app_admin_user_delete', {id: user.id}) }}" style="display: inline;" onsubmit="return confirm('Are you sure?')">
+                            <button type="submit" class="btn-small btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

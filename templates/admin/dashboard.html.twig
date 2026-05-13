@@ -1,0 +1,196 @@
+{% extends 'backend.html.twig' %}
+
+{% block title %}Admin Dashboard - BIG 4{% endblock %}
+
+{% block topbar_title %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="sec-head">
+      <div>
+        <h2>Admin Dashboard</h2>
+        <p class="sec-sub">Overview of delivery operations, assigned drivers, and active orders.</p>
+      </div>
+      <a href="{{ path('app_admin_support_queue') }}" class="t-btn primary">Support Queue</a>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-lbl">Total Deliveries</div>
+        <div class="kpi-val">{{ deliveryCount }}</div>
+        <div class="kpi-chg up">Active monitoring</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Pending Orders</div>
+        <div class="kpi-val">{{ pendingCount }}</div>
+        <div class="kpi-chg down">Needs attention</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Assigned Deliveries</div>
+        <div class="kpi-val">{{ assignedCount }}</div>
+        <div class="kpi-chg up">In progress</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Ingredients</div>
+        <div class="kpi-val">{{ ingredientCount }}</div>
+        <div class="kpi-chg {{ lowStockCount > 0 ? 'down' : 'up' }}">{{ lowStockCount }} low-stock items</div>
+      </div>
+    </div>
+
+    {% if autoWasteMoved > 0 %}
+      <div style="margin-bottom:1rem; padding:.75rem 1rem; border:1px solid rgba(184,135,42,.25); border-radius:8px; background:#fff8eb; color:var(--brown);">
+        Automation moved {{ autoWasteMoved }} expired ingredient stocks to waste records.
+      </div>
+    {% endif %}
+
+    <div class="mod-grid">
+      <div class="mod-card" onclick="location.href='{{ path('app_delivery_index') }}'">
+        <div class="card-top">
+          <div>
+            <p class="c-title">Deliveries</p>
+            <p class="c-desc">View and manage all current and pending delivery orders.</p>
+          </div>
+          <div class="c-icon gold">🚚</div>
+        </div>
+        <div class="c-stats">
+          <div class="cs-item">
+            <div class="cs-num">{{ deliveryCount }}</div>
+            <div class="cs-lbl">Total orders</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-num">{{ pendingCount }}</div>
+            <div class="cs-lbl">Pending</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-card" onclick="location.href='{{ path('app_delivery_man_index') }}'">
+        <div class="card-top">
+          <div>
+            <p class="c-title">Delivery Team</p>
+            <p class="c-desc">Manage drivers and review assignments across the fleet.</p>
+          </div>
+          <div class="c-icon green">👥</div>
+        </div>
+        <div class="c-stats">
+          <div class="cs-item">
+            <div class="cs-num">{{ deliveryManCount }}</div>
+            <div class="cs-lbl">Drivers</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-num">{{ assignedCount }}</div>
+            <div class="cs-lbl">Assigned</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-card" onclick="location.href='{{ path('admin_ingredient_index') }}'">
+        <div class="card-top">
+          <div>
+            <p class="c-title">Ingredient Stock</p>
+            <p class="c-desc">Track stock levels, low-stock alerts and expiry-driven waste reduction.</p>
+          </div>
+          <div class="c-icon amber">🥬</div>
+        </div>
+        <div class="c-stats">
+          <div class="cs-item">
+            <div class="cs-num">{{ lowStockCount }}</div>
+            <div class="cs-lbl">Low Stock</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-num">{{ expiredCount }}</div>
+            <div class="cs-lbl">Expired</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-card" onclick="location.href='{{ path('app_admin_vehicles') }}'">
+        <div class="card-top">
+          <div>
+            <p class="c-title">Fleet Vehicles</p>
+            <p class="c-desc">Manage vehicles and assign drivers to the fleet.</p>
+          </div>
+          <div class="c-icon blue">🚙</div>
+        </div>
+        <div class="c-stats">
+          <div class="cs-item">
+            <div class="cs-num">{{ vehicleCount }}</div>
+            <div class="cs-lbl">Vehicles</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-card" onclick="location.href='{{ path('admin_fleet_dashboard') }}'">
+        <div class="card-top">
+          <div>
+            <p class="c-title">Fleet Dashboard</p>
+            <p class="c-desc">Open live driver tracking, smart delivery assignment, and distance alerts.</p>
+          </div>
+          <div class="c-icon amber">📍</div>
+        </div>
+        <div class="c-stats">
+          <div class="cs-item">
+            <div class="cs-num">{{ deliveryManCount }}</div>
+            <div class="cs-lbl">Drivers</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-num">{{ assignedCount }}</div>
+            <div class="cs-lbl">Active</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-card" onclick="location.href='{{ path('app_admin_users') }}'">
+        <div class="card-top">
+          <div>
+            <p class="c-title">Users Management</p>
+            <p class="c-desc">Manage clients, delivery men, and admin accounts.</p>
+          </div>
+          <div class="c-icon red">👤</div>
+        </div>
+        <div class="c-stats">
+          <div class="cs-item">
+            <div class="cs-num">Users</div>
+            <div class="cs-lbl">Management</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod-card">
+        <div class="card-top">
+          <div>
+            <p class="c-title">Quick Actions</p>
+            <p class="c-desc">Use quick links to access delivery creation and management controls.</p>
+          </div>
+          <div class="c-icon blue">⚡</div>
+        </div>
+        <div class="q-grid">
+          <button class="q-btn" onclick="location.href='{{ path('app_delivery_new') }}'">
+            <span class="q-icon">➕</span>
+            <span class="q-lbl">New Delivery</span>
+            <span class="q-sub">Create order manually</span>
+          </button>
+          <button class="q-btn" onclick="location.href='{{ path('app_delivery_index') }}'">
+            <span class="q-icon">📋</span>
+            <span class="q-lbl">All Deliveries</span>
+            <span class="q-sub">Review status board</span>
+          </button>
+          <button class="q-btn" onclick="location.href='{{ path('admin_fleet_dashboard') }}'">
+            <span class="q-icon">📍</span>
+            <span class="q-lbl">Fleet Dashboard</span>
+            <span class="q-sub">Track and assign drivers</span>
+          </button>
+          <button class="q-btn" onclick="location.href='{{ path('admin_waste_new') }}'">
+            <span class="q-icon">🗑️</span>
+            <span class="q-lbl">Log Waste</span>
+            <span class="q-sub">Adjust stock instantly</span>
+          </button>
+          <button class="q-btn" onclick="location.href='{{ path('admin_ingredient_new') }}'">
+            <span class="q-icon">➕</span>
+            <span class="q-lbl">New Ingredient</span>
+            <span class="q-sub">Update recipe stock base</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
